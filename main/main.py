@@ -1,13 +1,15 @@
+import math
+
 from PySide2.QtWidgets import QApplication, QMessageBox, QStyleFactory, QLCDNumber
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtCore import QFile, QTimer, QDateTime
-
+import loguru
+import numpy as np
+from numpy import random
 import PySide2
 import os
 
 from loguru import logger
-
-
 
 
 dirname = os.path.dirname(PySide2.__file__) 
@@ -19,7 +21,7 @@ os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = plugin_path
 class Sudoku():
     def __init__(self):
         #从文件中加载UI定义
-        qfile_states = QFile("./pyside2/main.ui")
+        qfile_states = QFile("E:\\text\sudoku\\2\sudoku\pyside2\main.ui")
         qfile_states.open(QFile.ReadOnly)
         qfile_states.close()
         self.ui = QUiLoader().load(qfile_states)            #加载窗口
@@ -28,13 +30,13 @@ class Sudoku():
         self.num_states = []
         self.difficulty = 1
         self.used_time = 0
+        self.check_flag = 0
+        
 
         #绑定
         self.push_button_connects()
         self.ui.bt_start.clicked.connect(self.start_game)
         self.ui.bt_set_dif.clicked.connect(self.set_difficulty)
-
-        
         self.lcd_init()
 
         
@@ -229,11 +231,19 @@ class Sudoku():
     def read_nums(self):
         self.num_states = self.read_nums_tools()
         # logger.debug(self.num_states)
+        int_num_state = []
+        if None not in self.num_states:
+            for i in range(81):
+                int_num_state.append(int(self.num_states[i]))
+            self.check_flag = 1
+        else:
+            self.check_flag = 0
 
     #槽-开始游戏
     def start_game(self):
         self.lcd_timer.start(1000)
         self.used_time = 0
+        self.create_sudu()
 
 
     #显示倒计时
@@ -248,8 +258,8 @@ class Sudoku():
     def set_difficulty(self):
         try:
             self.difficulty = int(self.ui.word_dif.text())
-            if(self.difficulty < 0 or self.difficulty > 4):
-                QMessageBox.information(self.ui, '信息', '请输入1~4的数字')
+            if(self.difficulty < 0 or self.difficulty > 5):
+                QMessageBox.information(self.ui, '信息', '请输入1~5的数字')
                 self.ui.word_dif.clear()
         except:
             QMessageBox.information(self.ui, '信息', '请输入数字')
@@ -265,8 +275,185 @@ class Sudoku():
         self.lcd_timer = QTimer()
         self.lcd_timer.timeout.connect(self.show_lcd_time)
 
+    def create_sudu(self):  # 用于产生数独答案
+        shudu = np.zeros((9, 9), dtype=int)  # 产生全0数组备用
+        while (sum(sum(shudu[:, :])) != 405):  # 判断数独答案是否正确，简单了点，但很实用
+            n = 1
+            A = np.zeros((9, 9), dtype=int)
+            a = [x for x in range(1, 10)]  # 产生1-9数组备用
+            b = [x for x in range(1, 10)]
+            random.shuffle(b)  # 产生随机1-9数组，作为数独第一行
+            A[0, :] = b  # 赋值
+            for i in range(1, 9):  # 开始填数
+                for j in range(0, 9):
+                    x = A[i, :]  # 取出所在行
+                    y = A[:, j]  # 取出所在列
+                    if 0 <= j and j < 3:
+                        z = A[:, 0:3]
+                    elif 3 <= j and j < 6:
+                        z = A[:, 3:6]
+                    else:
+                        z = A[:, 6:9]
+                    if 0 <= i and i < 3:
+                        z = z[0:3, :]
+                    elif 3 <= i and i < 6:
+                        z = z[3:6, :]
+                    else:
+                        z = z[6:9, :]  # 取出所在宫
 
+                    x_pos = np.nonzero(x)[0]  # 取出行，列，宫的所有非零值
+                    X = np.zeros((len(x_pos)), dtype=int)
+                    for p in range(0, len(x_pos)):
+                        X[p] = x[x_pos[p]]
 
+                    y_pos = np.nonzero(y)[0]
+                    Y = np.zeros((len(y_pos)), dtype=int)
+                    for p in range(0, len(y_pos)):
+                        Y[p] = y[y_pos[p]]
+
+                    z_pos = np.transpose(np.nonzero(z))
+                    Z = np.zeros((len(z_pos)), dtype=int)
+                    for p in range(0, len(z_pos)):
+                        m = z_pos[p, 0]
+                        n = z_pos[p, 1]
+                        Z[p] = z[m, n]
+
+                    t = list(set(X).union(set(Y)))
+                    t = list(set(t).union(set(Z)))  # 所有非零值取并集，
+
+                    n = list(set(a).difference(set(t)))  # 并集和a取差集，判断哪些数还可以填
+
+                    try:
+                        L = len(n)  # 判断是否还有备选数
+                    except BaseException as e:
+                        L = 0
+                    r = random.random()
+                    h = math.ceil(r * L)  # 备选数中随机选择一个
+                    try:
+                        A[i, j] = n[h - 1]  # 进行赋值
+                    except BaseException as e:
+                        n = 2  # 报错则说明之前的填数有误
+                        break
+                if n == 2:
+                    break
+            if n == 2:
+                continue  # 重新开始循环
+            shudu = A  # 81个数全部正确，则赋值
+
+        for k in range(0, 9):
+            b = [x for x in range(0, 9)]
+            random.shuffle(b)
+            for m in range(0, self.difficulty):
+                shudu[k, b[m]] = 0
+
+        new_shudu = []
+        for i in range(9):
+            for j in range(9):
+                new_shudu.append(shudu[i][j])
+
+        for i in range(81):
+            if(new_shudu[i] == 0):
+                new_shudu[i] = " "
+        self.set_num(new_shudu)
+        
+    def set_num(self, state_list):
+        self.ui.n011.setText(str(state_list[0]))
+        self.ui.n012.setText(str(state_list[1]))
+        self.ui.n013.setText(str(state_list[2]))
+        self.ui.n014.setText(str(state_list[3]))
+        self.ui.n015.setText(str(state_list[4]))
+        self.ui.n016.setText(str(state_list[5]))
+        self.ui.n017.setText(str(state_list[6]))
+        self.ui.n018.setText(str(state_list[7]))
+        self.ui.n019.setText(str(state_list[8]))
+
+        self.ui.n021.setText(str(state_list[9]))
+        self.ui.n022.setText(str(state_list[10]))
+        self.ui.n023.setText(str(state_list[11]))
+        self.ui.n024.setText(str(state_list[12]))
+        self.ui.n025.setText(str(state_list[13]))
+        self.ui.n026.setText(str(state_list[14]))
+        self.ui.n027.setText(str(state_list[15]))
+        self.ui.n028.setText(str(state_list[16]))
+        self.ui.n029.setText(str(state_list[17]))
+
+        self.ui.n031.setText(str(state_list[18]))
+        self.ui.n032.setText(str(state_list[19]))
+        self.ui.n033.setText(str(state_list[20]))
+        self.ui.n034.setText(str(state_list[21]))
+        self.ui.n035.setText(str(state_list[22]))
+        self.ui.n036.setText(str(state_list[23]))
+        self.ui.n037.setText(str(state_list[24]))
+        self.ui.n038.setText(str(state_list[25]))
+        self.ui.n039.setText(str(state_list[26]))
+
+        self.ui.n041.setText(str(state_list[27]))
+        self.ui.n042.setText(str(state_list[28]))
+        self.ui.n043.setText(str(state_list[29]))
+        self.ui.n044.setText(str(state_list[30]))
+        self.ui.n045.setText(str(state_list[31]))
+        self.ui.n046.setText(str(state_list[32]))
+        self.ui.n047.setText(str(state_list[33]))
+        self.ui.n048.setText(str(state_list[34]))
+        self.ui.n049.setText(str(state_list[35]))
+
+        self.ui.n051.setText(str(state_list[36]))
+        self.ui.n052.setText(str(state_list[37]))
+        self.ui.n053.setText(str(state_list[38]))
+        self.ui.n054.setText(str(state_list[39]))
+        self.ui.n055.setText(str(state_list[40]))
+        self.ui.n056.setText(str(state_list[41]))
+        self.ui.n057.setText(str(state_list[42]))
+        self.ui.n058.setText(str(state_list[43]))
+        self.ui.n059.setText(str(state_list[44]))
+
+        self.ui.n061.setText(str(state_list[45]))
+        self.ui.n062.setText(str(state_list[46]))
+        self.ui.n063.setText(str(state_list[47]))
+        self.ui.n064.setText(str(state_list[48]))
+        self.ui.n065.setText(str(state_list[49]))
+        self.ui.n066.setText(str(state_list[50]))
+        self.ui.n067.setText(str(state_list[51]))
+        self.ui.n068.setText(str(state_list[52]))
+        self.ui.n069.setText(str(state_list[53]))
+
+        self.ui.n071.setText(str(state_list[54]))
+        self.ui.n072.setText(str(state_list[55]))
+        self.ui.n073.setText(str(state_list[56]))
+        self.ui.n074.setText(str(state_list[57]))
+        self.ui.n075.setText(str(state_list[58]))
+        self.ui.n076.setText(str(state_list[59]))
+        self.ui.n077.setText(str(state_list[60]))
+        self.ui.n078.setText(str(state_list[61]))
+        self.ui.n079.setText(str(state_list[62]))
+
+        self.ui.n081.setText(str(state_list[63]))
+        self.ui.n082.setText(str(state_list[64]))
+        self.ui.n083.setText(str(state_list[65]))
+        self.ui.n084.setText(str(state_list[66]))
+        self.ui.n085.setText(str(state_list[67]))
+        self.ui.n086.setText(str(state_list[68]))
+        self.ui.n087.setText(str(state_list[69]))
+        self.ui.n088.setText(str(state_list[70]))
+        self.ui.n089.setText(str(state_list[71]))
+
+        self.ui.n091.setText(str(state_list[72]))
+        self.ui.n092.setText(str(state_list[73]))
+        self.ui.n093.setText(str(state_list[74]))
+        self.ui.n094.setText(str(state_list[75]))
+        self.ui.n095.setText(str(state_list[76]))
+        self.ui.n096.setText(str(state_list[77]))
+        self.ui.n097.setText(str(state_list[78]))
+        self.ui.n098.setText(str(state_list[79]))
+        self.ui.n099.setText(str(state_list[80]))
+
+    def check(self):
+        if self.check_flag:
+            result_num=np.array(self.num_states).reshape(3,3) 
+            if sum(sum(result_num[:, :])) == 405:
+                print("success")
+            else:
+                print("error")
 
 if __name__ == "__main__":
     # QApplication.setStyle(QStyleFactory.create('Fusion'))
