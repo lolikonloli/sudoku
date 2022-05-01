@@ -19,7 +19,7 @@
      <x>3</x>
      <y>3</y>
      <width>901</width>
-     <height>581</height>
+     <height>600</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="all">
@@ -2332,7 +2332,7 @@
            </font>
           </property>
           <property name="text">
-           <string/>
+           <string>1</string>
           </property>
          </widget>
         </item>

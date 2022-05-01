@@ -20,7 +20,7 @@ class Ui_Form(object):
         Form.resize(964, 650)
         self.layoutWidget = QWidget(Form)
         self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(3, 3, 901, 581))
+        self.layoutWidget.setGeometry(QRect(3, 3, 901, 600))
         self.all = QGridLayout(self.layoutWidget)
         self.all.setObjectName(u"all")
         self.all.setSizeConstraint(QLayout.SetDefaultConstraint)
@@ -909,7 +909,7 @@ class Ui_Form(object):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.n069.setText("")
         self.n059.setText("")
-        self.word_dif.setText("")
+        self.word_dif.setText(QCoreApplication.translate("Form", u"1", None))
         self.bt_set_dif.setText(QCoreApplication.translate("Form", u"\u8bbe\u7f6e\u96be\u5ea6", None))
         self.bt_start.setText(QCoreApplication.translate("Form", u"\u5f00\u59cb", None))
     # retranslateUi
