@@ -5,6 +5,8 @@ from PySide2.QtCore import QFile
 import PySide2
 import os
 
+
+
 dirname = os.path.dirname(PySide2.__file__) 
 plugin_path = os.path.join(dirname, 'plugins', 'platforms')
 os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = plugin_path
@@ -17,16 +19,13 @@ class Sudoku():
         qfile_states = QFile("./pyside2/main.ui")
         qfile_states.open(QFile.ReadOnly)
         qfile_states.close()
-        '''
-        从UI定义中动态创建一个相应的窗口文件
-        里面的控件对象也成为窗口对象的属性了
-        '''
         self.ui = QUiLoader().load(qfile_states)            #加载窗口
 
+        self.num_states = []
         self.push_button_connects()
 
         
-
+    #输入绑定
     def push_button_connects(self):
         self.ui.n011.textChanged.connect(self.read_nums)
         self.ui.n012.textChanged.connect(self.read_nums)
@@ -118,9 +117,105 @@ class Sudoku():
         self.ui.n098.textChanged.connect(self.read_nums)
         self.ui.n099.textChanged.connect(self.read_nums)
 
+    #读取
+    def read_nums_tools(self):
+        temp_list = []
+        temp_list.append(self.ui.n011.text())
+        temp_list.append(self.ui.n012.text())
+        temp_list.append(self.ui.n013.text())
+        temp_list.append(self.ui.n014.text())
+        temp_list.append(self.ui.n015.text())
+        temp_list.append(self.ui.n016.text())
+        temp_list.append(self.ui.n017.text())
+        temp_list.append(self.ui.n018.text())
+        temp_list.append(self.ui.n019.text())
 
+        temp_list.append(self.ui.n021.text())
+        temp_list.append(self.ui.n022.text())
+        temp_list.append(self.ui.n023.text())
+        temp_list.append(self.ui.n024.text())
+        temp_list.append(self.ui.n025.text())
+        temp_list.append(self.ui.n026.text())
+        temp_list.append(self.ui.n027.text())
+        temp_list.append(self.ui.n028.text())
+        temp_list.append(self.ui.n029.text())
+
+        temp_list.append(self.ui.n031.text())
+        temp_list.append(self.ui.n032.text())
+        temp_list.append(self.ui.n033.text())
+        temp_list.append(self.ui.n034.text())
+        temp_list.append(self.ui.n035.text())
+        temp_list.append(self.ui.n036.text())
+        temp_list.append(self.ui.n037.text())
+        temp_list.append(self.ui.n038.text())
+        temp_list.append(self.ui.n039.text())
+
+        temp_list.append(self.ui.n041.text())
+        temp_list.append(self.ui.n042.text())
+        temp_list.append(self.ui.n043.text())
+        temp_list.append(self.ui.n044.text())
+        temp_list.append(self.ui.n045.text())
+        temp_list.append(self.ui.n046.text())
+        temp_list.append(self.ui.n047.text())
+        temp_list.append(self.ui.n048.text())
+        temp_list.append(self.ui.n049.text())
+
+        temp_list.append(self.ui.n051.text())
+        temp_list.append(self.ui.n052.text())
+        temp_list.append(self.ui.n053.text())
+        temp_list.append(self.ui.n054.text())
+        temp_list.append(self.ui.n055.text())
+        temp_list.append(self.ui.n056.text())
+        temp_list.append(self.ui.n057.text())
+        temp_list.append(self.ui.n058.text())
+        temp_list.append(self.ui.n059.text())
+
+        temp_list.append(self.ui.n061.text())
+        temp_list.append(self.ui.n062.text())
+        temp_list.append(self.ui.n063.text())
+        temp_list.append(self.ui.n064.text())
+        temp_list.append(self.ui.n065.text())
+        temp_list.append(self.ui.n066.text())
+        temp_list.append(self.ui.n067.text())
+        temp_list.append(self.ui.n068.text())
+        temp_list.append(self.ui.n069.text())
+
+        temp_list.append(self.ui.n071.text())
+        temp_list.append(self.ui.n072.text())
+        temp_list.append(self.ui.n073.text())
+        temp_list.append(self.ui.n074.text())
+        temp_list.append(self.ui.n075.text())
+        temp_list.append(self.ui.n076.text())
+        temp_list.append(self.ui.n077.text())
+        temp_list.append(self.ui.n078.text())
+        temp_list.append(self.ui.n079.text())
+
+        temp_list.append(self.ui.n081.text())
+        temp_list.append(self.ui.n082.text())
+        temp_list.append(self.ui.n083.text())
+        temp_list.append(self.ui.n084.text())
+        temp_list.append(self.ui.n085.text())
+        temp_list.append(self.ui.n086.text())
+        temp_list.append(self.ui.n087.text())
+        temp_list.append(self.ui.n088.text())
+        temp_list.append(self.ui.n089.text())
+
+        temp_list.append(self.ui.n091.text())
+        temp_list.append(self.ui.n092.text())
+        temp_list.append(self.ui.n093.text())
+        temp_list.append(self.ui.n094.text())
+        temp_list.append(self.ui.n095.text())
+        temp_list.append(self.ui.n096.text())
+        temp_list.append(self.ui.n097.text())
+        temp_list.append(self.ui.n098.text())
+        temp_list.append(self.ui.n099.text())
+
+        return temp_list
+
+    #读取
     def read_nums(self):
-        print("clicked")
+        self.num_states = self.read_nums_tools()
+        print(self.num_states)
 
 
 
