@@ -9,6 +9,7 @@ from loguru import logger
 
 
 
+
 dirname = os.path.dirname(PySide2.__file__) 
 plugin_path = os.path.join(dirname, 'plugins', 'platforms')
 os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = plugin_path
@@ -34,7 +35,7 @@ class Sudoku():
         
 
         
-    #输入绑定
+    #输入数字绑定
     def push_button_connects(self):
         self.ui.n011.textChanged.connect(self.read_nums)
         self.ui.n012.textChanged.connect(self.read_nums)
@@ -126,7 +127,7 @@ class Sudoku():
         self.ui.n098.textChanged.connect(self.read_nums)
         self.ui.n099.textChanged.connect(self.read_nums)
 
-    #读取
+    #读取所有数字
     def read_nums_tools(self):
         temp_list = []
         temp_list.append(self.ui.n011.text())
@@ -221,14 +222,16 @@ class Sudoku():
 
         return temp_list
 
-    #读取
+    #槽-读取
     def read_nums(self):
         self.num_states = self.read_nums_tools()
         # logger.debug(self.num_states)
 
+    #槽-开始游戏
     def start_game(self):
         logger.debug("clicked_start_game")
 
+    #槽-读取难度
     def set_difficulty(self):
         try:
             self.difficulty = int(self.ui.word_dif.text())
@@ -238,7 +241,6 @@ class Sudoku():
         except:
             QMessageBox.information(self.ui, '信息', '请输入数字')
             self.ui.word_dif.clear()
-
         # logger.debug("clicked_set_difficulty; value is : {}".format(self.difficulty))
 
 
