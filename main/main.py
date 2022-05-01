@@ -5,6 +5,8 @@ from PySide2.QtCore import QFile
 import PySide2
 import os
 
+from loguru import logger
+
 
 
 dirname = os.path.dirname(PySide2.__file__) 
@@ -21,8 +23,15 @@ class Sudoku():
         qfile_states.close()
         self.ui = QUiLoader().load(qfile_states)            #加载窗口
 
+        #属性
         self.num_states = []
+        self.difficulty = 1
+
+        #绑定
         self.push_button_connects()
+        self.ui.bt_start.clicked.connect(self.start_game)
+        self.ui.bt_set_dif.clicked.connect(self.set_difficulty)
+        
 
         
     #输入绑定
@@ -215,8 +224,25 @@ class Sudoku():
     #读取
     def read_nums(self):
         self.num_states = self.read_nums_tools()
-        print(self.num_states)
+        # logger.debug(self.num_states)
 
+    def start_game(self):
+        logger.debug("clicked_start_game")
+
+    def set_difficulty(self):
+        try:
+            self.difficulty = int(self.ui.word_dif.text())
+            if(self.difficulty < 0 or self.difficulty > 4):
+                QMessageBox.information(self.ui, '信息', '请输入1~4的数字')
+                self.ui.word_dif.clear()
+        except:
+            QMessageBox.information(self.ui, '信息', '请输入数字')
+            self.ui.word_dif.clear()
+
+        # logger.debug("clicked_set_difficulty; value is : {}".format(self.difficulty))
+
+
+    
 
 
 if __name__ == "__main__":
