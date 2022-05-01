@@ -885,12 +885,12 @@ class Ui_Form(object):
 
         self.con.addItem(self.verticalSpacer, 4, 1, 1, 1)
 
-        self.lcdNumber = QLCDNumber(self.layoutWidget)
-        self.lcdNumber.setObjectName(u"lcdNumber")
-        self.lcdNumber.setMinimumSize(QSize(0, 60))
-        self.lcdNumber.setMaximumSize(QSize(16777215, 60))
+        self.lcd = QLCDNumber(self.layoutWidget)
+        self.lcd.setObjectName(u"lcd")
+        self.lcd.setMinimumSize(QSize(0, 60))
+        self.lcd.setMaximumSize(QSize(16777215, 60))
 
-        self.con.addWidget(self.lcdNumber, 1, 1, 1, 1)
+        self.con.addWidget(self.lcd, 1, 1, 1, 1)
 
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 

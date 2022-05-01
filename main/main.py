@@ -1,6 +1,6 @@
-from PySide2.QtWidgets import QApplication,QMessageBox,QStyleFactory
+from PySide2.QtWidgets import QApplication, QMessageBox, QStyleFactory, QLCDNumber
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtCore import QFile
+from PySide2.QtCore import QFile, QTimer, QDateTime
 
 import PySide2
 import os
@@ -27,12 +27,15 @@ class Sudoku():
         #属性
         self.num_states = []
         self.difficulty = 1
+        self.used_time = 0
 
         #绑定
         self.push_button_connects()
         self.ui.bt_start.clicked.connect(self.start_game)
         self.ui.bt_set_dif.clicked.connect(self.set_difficulty)
+
         
+        self.lcd_init()
 
         
     #输入数字绑定
@@ -229,7 +232,17 @@ class Sudoku():
 
     #槽-开始游戏
     def start_game(self):
-        logger.debug("clicked_start_game")
+        self.lcd_timer.start(1000)
+        self.used_time = 0
+
+
+    #显示倒计时
+    def show_lcd_time(self):
+        self.used_time = self.used_time + 1
+        minute = self.used_time / 60
+        second = self.used_time % 60
+        temp_time = str("%02d:%02d"%(minute, second))
+        self.ui.lcd.display(temp_time)
 
     #槽-读取难度
     def set_difficulty(self):
@@ -243,8 +256,16 @@ class Sudoku():
             self.ui.word_dif.clear()
         # logger.debug("clicked_set_difficulty; value is : {}".format(self.difficulty))
 
+    #液晶屏初始化
+    def lcd_init(self):
+        self.ui.lcd.setSegmentStyle(QLCDNumber.Flat)
+        self.ui.lcd.setDigitCount(5)
+        self.ui.lcd.display("00:00")
 
-    
+        self.lcd_timer = QTimer()
+        self.lcd_timer.timeout.connect(self.show_lcd_time)
+
+
 
 
 if __name__ == "__main__":
