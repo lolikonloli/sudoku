@@ -242,7 +242,7 @@ class Sudoku():
             self.check_flag = 1
         except:
             self.check_flag = 0
-        self.check()
+        self.check(int_num_state)
 
 
     #槽-开始游戏
@@ -374,20 +374,17 @@ class Sudoku():
         self.ui.n098.setText(str(state_list[79]))
         self.ui.n099.setText(str(state_list[80]))
 
-    def check(self):
-        result_num=np.array(self.int_num_state).reshape(9,9) 
-        if sum(sum(result_num[:,:])) == 405:
-            self.flag = 1
-            self.show_message()
-        else:
-            self.flag = 2
-            self.show_message()
+    def check(self, int_num_state):
+        if(self.check_flag == 1):
+            result_num=np.array(int_num_state).reshape(9,9) 
+            if sum(sum(result_num[:,:])) == 405:
+                self.flag = 1
+                self.show_message()
+        
 
     def show_message(self):
         if self.flag == 1:
             QMessageBox.information(self.ui, '恭喜', '您已经成功破解此题,用时'+self.temp_time)
-        elif self.flag == 2:
-            QMessageBox.warning(self.ui, '失败', '解题错误,用时'+self.temp_time+"请继续答题")
 
 
 if __name__ == "__main__":
