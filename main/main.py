@@ -234,10 +234,10 @@ class Sudoku():
     def read_nums(self):
         self.num_states = self.read_nums_tools()
         # logger.debug(self.num_states)
-        int_num_state = []
+        self.checkint_num_state = []
         try:
             for i in range(81):
-                int_num_state.append(int(self.num_states[i]))
+                self.checkint_num_state.append(int(self.num_states[i]))
             self.check_flag = 1
         except:
             self.check_flag = 0
@@ -256,8 +256,8 @@ class Sudoku():
         self.used_time = self.used_time + 1
         minute = self.used_time / 60
         second = self.used_time % 60
-        temp_time = str("%02d:%02d"%(minute, second))
-        self.ui.lcd.display(temp_time)
+        self.temp_time = str("%02d:%02d"%(minute, second))
+        self.ui.lcd.display(self.temp_time)
 
     #槽-读取难度
     def set_difficulty(self):
@@ -279,8 +279,6 @@ class Sudoku():
 
         self.lcd_timer = QTimer()
         self.lcd_timer.timeout.connect(self.show_lcd_time)
-
-
         
     def set_num(self, state_list):
         self.ui.n011.setText(str(state_list[0]))
@@ -374,12 +372,20 @@ class Sudoku():
         self.ui.n099.setText(str(state_list[80]))
 
     def check(self):
-        if self.check_flag:
-            result_num=np.array(self.num_states).reshape(3,3) 
-            if sum(sum(result_num[:, :])) == 405:
-                print("success")
-            else:
-                print("error")
+        result_num=np.array(self.checkint_num_state).reshape(9,9) 
+        if sum(sum(result_num[:,:])) == 405:
+            self.flag = 1
+            self.show_message()
+        else:
+            self.flag = 2
+            self.show_message()
+
+    def show_message(self):
+        if self.flag == 1:
+            QMessageBox.information(self.ui, '恭喜', '您已经成功破解此题,用时：'+self.temp_time)
+            self.lcd_timer.stop()
+        elif self.flag == 2:
+            QMessageBox.warning(self.ui, '失败', '解题错误,已使用时间：'+self.temp_time+"请继续答题")
 
 if __name__ == "__main__":
     # QApplication.setStyle(QStyleFactory.create('Fusion'))
