@@ -1,18 +1,11 @@
-from asyncio.windows_events import NULL
-import math
-from ssl import SSL_ERROR_SSL
-
-from PySide2.QtWidgets import QApplication, QMessageBox, QStyleFactory, QLCDNumber
+from PySide2.QtWidgets import QApplication, QMessageBox, QLCDNumber
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtCore import QFile, QTimer, QDateTime
-import loguru
+from PySide2.QtCore import QFile, QTimer
 import numpy as np
-from numpy import random
 import PySide2
 import os
 
-from loguru import logger
-from sympy import re
+# from loguru import logger
 from create_suduku import create_sudu
 
 import qdarkstyle
