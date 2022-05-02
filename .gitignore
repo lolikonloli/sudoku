@@ -1,6 +1,8 @@
+/vscode/*
+/dict/*
+/build/*
+
+*.exe
+*.spec
 *.pyc
-/*vscode
-/*dict
-/*build
-main.spec
 
