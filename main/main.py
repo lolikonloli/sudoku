@@ -15,6 +15,8 @@ from loguru import logger
 from sympy import re
 from create_suduku import create_sudu
 
+import qdarkstyle
+
 
 dirname = os.path.dirname(PySide2.__file__) 
 plugin_path = os.path.join(dirname, 'plugins', 'platforms')
@@ -391,7 +393,11 @@ class Sudoku():
 if __name__ == "__main__":
     # QApplication.setStyle(QStyleFactory.create('Fusion'))
     app = QApplication([])
-    app.setStyle('Fusion')
+    # app.setStyle('Fusion')
+
+    app.setStyleSheet(qdarkstyle.load_stylesheet_pyside2())
+# or in new API
+    app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='yside2'))
 
     sudoku = Sudoku()
     sudoku.ui.show()
