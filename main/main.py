@@ -384,6 +384,7 @@ class Sudoku():
 
     def show_message(self):
         if self.flag == 1:
+            self.lcd_timer.stop()
             QMessageBox.information(self.ui, '恭喜', '您已经成功破解此题,用时'+self.temp_time)
 
 
