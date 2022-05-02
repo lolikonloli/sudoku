@@ -71,7 +71,7 @@ def create_sudu(difficulty):  # 用于产生数独答案
             continue  # 重新开始循环
         shudu = A  # 81个数全部正确，则赋值
         
-    print(shudu)
+    # print(shudu)
 
     for k in range(0, 9):
         b = [x for x in range(0, 9)]

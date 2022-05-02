@@ -1,24 +1,19 @@
-from asyncio.windows_events import NULL
-import math
-from ssl import SSL_ERROR_SSL
-
-from PySide2.QtWidgets import QApplication, QMessageBox, QStyleFactory, QLCDNumber
+from PySide2.QtWidgets import QApplication, QMessageBox, QLCDNumber
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtCore import QFile, QTimer, QDateTime
-import loguru
+from PySide2.QtCore import QFile, QTimer
 import numpy as np
-from numpy import random
 import PySide2
 import os
 
-from loguru import logger
-from sympy import re
+# from loguru import logger
 from create_suduku import create_sudu
 
+import qdarkstyle
 
-dirname = os.path.dirname(PySide2.__file__) 
-plugin_path = os.path.join(dirname, 'plugins', 'platforms')
-os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = plugin_path
+
+# dirname = os.path.dirname(PySide2.__file__) 
+# plugin_path = os.path.join(dirname, 'plugins', 'platforms')
+# os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = plugin_path
 
 
 
@@ -242,7 +237,7 @@ class Sudoku():
             self.check_flag = 1
         except:
             self.check_flag = 0
-        self.check()
+        self.check(int_num_state)
 
 
     #槽-开始游戏
@@ -374,26 +369,28 @@ class Sudoku():
         self.ui.n098.setText(str(state_list[79]))
         self.ui.n099.setText(str(state_list[80]))
 
-    def check(self):
-        result_num=np.array(self.int_num_state).reshape(9,9) 
-        if sum(sum(result_num[:,:])) == 405:
-            self.flag = 1
-            self.show_message()
-        else:
-            self.flag = 2
-            self.show_message()
+    def check(self, int_num_state):
+        if(self.check_flag == 1):
+            result_num=np.array(int_num_state).reshape(9,9) 
+            if sum(sum(result_num[:,:])) == 405:
+                self.flag = 1
+                self.show_message()
+        
 
     def show_message(self):
         if self.flag == 1:
+            self.lcd_timer.stop()
             QMessageBox.information(self.ui, '恭喜', '您已经成功破解此题,用时'+self.temp_time)
-        elif self.flag == 2:
-            QMessageBox.warning(self.ui, '失败', '解题错误,用时'+self.temp_time+"请继续答题")
 
 
 if __name__ == "__main__":
     # QApplication.setStyle(QStyleFactory.create('Fusion'))
     app = QApplication([])
-    app.setStyle('Fusion')
+    # app.setStyle('Fusion')
+
+    app.setStyleSheet(qdarkstyle.load_stylesheet_pyside2())
+# or in new API
+    app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='yside2'))
 
     sudoku = Sudoku()
     sudoku.ui.show()
