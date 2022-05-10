@@ -1,6 +1,7 @@
 from PySide2.QtWidgets import QApplication, QMessageBox, QLCDNumber
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtCore import QFile, QTimer
+from PySide2 import QtGui
 import numpy as np
 import PySide2
 import os
@@ -11,9 +12,9 @@ from create_suduku import create_sudu
 import qdarkstyle
 
 
-# dirname = os.path.dirname(PySide2.__file__) 
-# plugin_path = os.path.join(dirname, 'plugins', 'platforms')
-# os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = plugin_path
+dirname = os.path.dirname(PySide2.__file__) 
+plugin_path = os.path.join(dirname, 'plugins', 'platforms')
+os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = plugin_path
 
 
 
@@ -24,6 +25,8 @@ class Sudoku():
         qfile_states.open(QFile.ReadOnly)
         qfile_states.close()
         self.ui = QUiLoader().load(qfile_states)            #加载窗口
+        self.ui.img_1.setPixmap(QtGui.QPixmap("./main/img_1.jpg"))
+        self.ui.img_2.setPixmap(QtGui.QPixmap("./main/img_2.jpg"))
 
         #属性
         self.num_states = []

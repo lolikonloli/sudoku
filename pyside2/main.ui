@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>964</width>
-    <height>650</height>
+    <width>920</width>
+    <height>635</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>3</x>
      <y>3</y>
      <width>901</width>
-     <height>600</height>
+     <height>621</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="all">
@@ -2309,6 +2309,38 @@
     </item>
     <item row="0" column="1">
      <layout class="QGridLayout" name="con">
+      <item row="2" column="1">
+       <widget class="QPushButton" name="bt_start">
+        <property name="minimumSize">
+         <size>
+          <width>93</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>微软雅黑</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>开始</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item row="3" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -2363,47 +2395,15 @@
         </item>
        </layout>
       </item>
-      <item row="2" column="1">
-       <widget class="QPushButton" name="bt_start">
-        <property name="minimumSize">
-         <size>
-          <width>93</width>
-          <height>60</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <family>微软雅黑</family>
-          <pointsize>10</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>开始</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <spacer name="verticalSpacer_2">
+      <item row="2" column="0">
+       <spacer name="horizontalSpacer">
         <property name="orientation">
-         <enum>Qt::Vertical</enum>
+         <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="4" column="1">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
+          <width>40</width>
+          <height>20</height>
          </size>
         </property>
        </spacer>
@@ -2424,18 +2424,31 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
+      <item row="0" column="1">
+       <widget class="QLabel" name="img_1">
+        <property name="minimumSize">
          <size>
-          <width>40</width>
-          <height>20</height>
+          <width>200</width>
+          <height>200</height>
          </size>
         </property>
-       </spacer>
+        <property name="text">
+         <string>img</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLabel" name="img_2">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>200</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>img</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
